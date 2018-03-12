@@ -14,6 +14,17 @@ public class UtenteDao<T extends Utente> implements DAO<String, T>{
 		utenteMap = new TreeMap<>();
 	}
 	
+	
+	public boolean checkData(String mail, String psw) {
+		String pswPattern = ".*{8,16}";
+		String mailPattern = ".*[a-zA-Z0-9]@.*[a-zA-Z0-9]";
+		if ((mail.matches(mailPattern))&&(psw.matches(pswPattern)))
+			return true;
+		else
+			return false;
+				
+	}
+	
 	@Override
 	public void createRecord(T t) {
 		utenteMap.put(t.getMail(), t);
@@ -48,6 +59,12 @@ public class UtenteDao<T extends Utente> implements DAO<String, T>{
 			return true;
 		else
 			return false;
+	}
+
+
+	@Override
+	public int mapSize() {
+		return utenteMap.size();
 	}
 
 }

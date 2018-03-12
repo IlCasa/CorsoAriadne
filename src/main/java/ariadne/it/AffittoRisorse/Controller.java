@@ -18,11 +18,22 @@ public class Controller {
 		this.risorse = new RisorsaDao();
 		this.utenti = new UtenteDao();
 	}
-	
-	
-	
+		
+	public PrenotazioneDao getPrenotazioni() {
+		return prenotazioni;
+	}
+
+	public RisorsaDao getRisorse() {
+		return risorse;
+	}
+
+	public UtenteDao getUtenti() {
+		return utenti;
+	}
+
 	// RISORSE CONTROLLER
 	public <T extends Risorsa> void addRisorsa(T ris) {
+		
 		risorse.createRecord(ris);
 	}
 	
@@ -51,9 +62,13 @@ public class Controller {
 	
 	// UTENTI CONTROLLER
 	public void addUtente(String mail, String psw, String nome) {
-		if(utenti.checkUtente(mail)) {
-			Utente user = new Utente(mail, psw, nome);
-			utenti.createRecord(user);
+		if(!utenti.checkUtente(mail)) {
+			if (utenti.checkData(mail, psw)){
+				Utente user = new Utente(mail, psw, nome);
+				utenti.createRecord(user);
+			}else {
+				System.out.println("- Non rispettati i pattern di mail e password");
+			}
 		}else {
 			System.out.println("- Utente già presente.");
 		}
@@ -65,8 +80,10 @@ public class Controller {
 	
 	public void updateUtente(String mail, String psw, String nome) {
 		if(utenti.checkUtente(mail)) {
-			Utente u = new Utente(mail, psw, nome);
-			utenti.updateRecord(mail, u);
+			if(utenti.checkData(mail,psw)) {
+				Utente u = new Utente(mail, psw, nome);
+				utenti.updateRecord(mail, u);
+			}
 		}
 	}
 	
@@ -83,8 +100,7 @@ public class Controller {
 	
 	
 	public void addPrenotazione(String mail,String tipo, int limite,  LocalDateTime dataInizio, LocalDateTime dataFine) {
-		if (utenti.checkUtente(mail)) {
-			//if(db.checkRisorsa(idRisorsa)) {
+		if(utenti.checkUtente(mail)) {
 				if(dataInizio.isBefore(dataFine)) {
 					int app = checkSlot(tipo, limite, dataInizio, dataFine);
 					if(app!=-1) {
@@ -96,11 +112,8 @@ public class Controller {
 				}else{
 					System.out.println("date sballate");
 				}
-//			}else {
-//				System.out.println("risorsa inesistente");
-//			}
 		}else {
-			System.out.println("User non existent");
+			System.out.println("User non presente");
 		}
 	}
 	

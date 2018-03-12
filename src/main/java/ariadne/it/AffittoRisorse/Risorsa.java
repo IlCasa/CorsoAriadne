@@ -23,11 +23,9 @@ public abstract class Risorsa {
 		return limite;
 	}
 
-
 	public void setLimite(int limite) {
 		this.limite = limite;
 	}
-
 
 	public static void resetIncrementaID() {
 		Risorsa.incrementaID = 0;

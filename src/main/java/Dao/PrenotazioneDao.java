@@ -43,4 +43,9 @@ public class PrenotazioneDao<T extends Prenotazione> implements DAO<Integer, T> 
 		return prenotazioneMap.get(k);
 	}
 
+	@Override
+	public int mapSize() {
+		return prenotazioneMap.size();
+	}
+
 }

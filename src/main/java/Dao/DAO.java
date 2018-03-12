@@ -9,5 +9,6 @@ public interface DAO<K, T>{
 	public void updateRecord(K k, T t);
 	public List<T> findAll();
 	public T findById(K k);
+	public int mapSize();
 	
 }

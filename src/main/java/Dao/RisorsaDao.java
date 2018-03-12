@@ -49,4 +49,9 @@ public class RisorsaDao<T extends Risorsa> implements DAO<Integer,T> {
 		else
 			return false;
 	}
+
+	@Override
+	public int mapSize() {
+		return risorsaMap.size();
+	}
 }
