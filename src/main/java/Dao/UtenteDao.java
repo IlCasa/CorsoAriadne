@@ -35,13 +35,19 @@ public class UtenteDao<T extends Utente> implements DAO<String, T>{
 	@Override
 	public List<T> findAll() {
 		List<T> list = new ArrayList<T>(utenteMap.values());
-
 		return list;
 	}
 
 	@Override
 	public T findById(String key) {
 		return utenteMap.get(key);
+	}
+	
+	public boolean checkUtente(String key) {
+		if(utenteMap.containsKey(key))
+			return true;
+		else
+			return false;
 	}
 
 }

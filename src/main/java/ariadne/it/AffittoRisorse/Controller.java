@@ -1,56 +1,96 @@
 package ariadne.it.AffittoRisorse;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.joda.time.LocalDateTime;
+
+import Dao.*;
+
 public class Controller {
 	
-	private static Database db = new Database();
+	private PrenotazioneDao prenotazioni;
+	private RisorsaDao risorse;
+	private UtenteDao utenti;
 	
-	
-	
-	public void addRisorsa(Risorsa ris) {
-		db.setRisorse(ris);
+	public Controller() {
+		this.prenotazioni = new PrenotazioneDao();
+		this.risorse = new RisorsaDao();
+		this.utenti = new UtenteDao();
 	}
-	public void checkDb() {
-		System.out.println("Risorse:\n"+db.risorsetoString() +"\nUtenti: \n"+ db.utentitoString()+"\nPrenotazioni:\n"+db.prenotazionitoString());
+	
+	
+	
+	// RISORSE CONTROLLER
+	public <T extends Risorsa> void addRisorsa(T ris) {
+		risorse.createRecord(ris);
 	}
-	public void addUtente(String mail, String psw) {
-		boolean flag = false;
-		for(User u: db.getUtenti()) {
-			if(u.getMail().equals(mail)) {
-				flag = true;
-				break;
-			}
-		}
-		if(!flag) {
-			User user = new User(mail, psw);
-			if(user.getMail()!=null&&user.getPsw()!=null)
-				db.setUtenti(user);
-			else
-				System.out.println("invalid arguments to create user");
+	
+	public <T extends Risorsa> void updateRisorsa(int id, T ris) {
+		if(risorse.checkRisorsa(id))
+			risorse.updateRecord(id, ris);
+		else
+			System.out.println("- Risorsa non presente, impossibile l'update");
+	}
+	
+	public void deleteRisorsa(int id) {
+		if(risorse.checkRisorsa(id))
+			risorse.deleteRecord(id);
+		else
+			System.out.println("- Risorsa non presente, impossibile eliminare");
+		//find by id and if not null
+	}
+	
+	public void printRisorsa(int id) {
+		System.out.println(risorse.findById(id));
+	}
+	
+	public void printAllRisorse() {
+		System.out.println(risorse.findAll());
+	}
+	
+	// UTENTI CONTROLLER
+	public void addUtente(String mail, String psw, String nome) {
+		if(utenti.checkUtente(mail)) {
+			Utente user = new Utente(mail, psw, nome);
+			utenti.createRecord(user);
 		}else {
-			System.out.println("Utente già presente, cambiare mail.");
+			System.out.println("- Utente già presente.");
 		}
 	}
-	public void printRisorse() {
-		System.out.println("risorse: ");
-		for(Risorsa r: db.getRisorse()) {
-			System.out.println("--"+r.toString());
+	
+	public void deleteUtente(String key) {
+		utenti.deleteRecord(key);
+	}
+	
+	public void updateUtente(String mail, String psw, String nome) {
+		if(utenti.checkUtente(mail)) {
+			Utente u = new Utente(mail, psw, nome);
+			utenti.updateRecord(mail, u);
 		}
 	}
+	
+	public void printAllUtenti() {
+		System.out.println(utenti.findAll());
+	}
+	
+	public void printUtente(String key) {
+		System.out.println(utenti.findById(key));
+	}
+
+	
+	// PRENOTAZIONI CONTROLLER
+	
 	
 	public void addPrenotazione(String mail,String tipo, int limite,  LocalDateTime dataInizio, LocalDateTime dataFine) {
-		if (db.checkUser(mail)) {
+		if (utenti.checkUtente(mail)) {
 			//if(db.checkRisorsa(idRisorsa)) {
 				if(dataInizio.isBefore(dataFine)) {
 					int app = checkSlot(tipo, limite, dataInizio, dataFine);
 					if(app!=-1) {
 						Prenotazione p = new Prenotazione(app, mail, dataInizio, dataFine);
 						System.out.println("aggiunta prenotazione");
-						db.addPrenotazione(p);
+						prenotazioni.createRecord(p);
 					}else
 						System.out.println("DIOBOIA hai paccato, non ci sono slot o risorse");
 				}else{
@@ -64,9 +104,9 @@ public class Controller {
 		}
 	}
 	
-	public ArrayList<Risorsa> findRisorse(String tipo, int limite) {
+	public ArrayList<Risorsa> findRisorseOk(String tipo, int limite) {
 		ArrayList<Risorsa> tmp = new ArrayList<>();
-		for(Risorsa r : db.getRisorse()) {
+		for(Risorsa r : (ArrayList<Risorsa>)risorse.findAll()) {
 			if((r.getTipo().equals(tipo))&&(r.getLimite()>=limite)){
 				tmp.add(r);
 			}
@@ -78,13 +118,13 @@ public class Controller {
 		List<Risorsa> risorseOk = new ArrayList<>();
 		List<Risorsa> risorseOkDispo = new ArrayList<>();
 		int index = -1;
-		risorseOk = findRisorse(tipo, limite);
+		risorseOk = findRisorseOk(tipo, limite);
 		boolean flag=true;
 		for(Risorsa r: risorseOk) {
 			flag = true;
-			for(Prenotazione p : db.getPrenotazione()) {
+			for(Prenotazione p : (ArrayList<Prenotazione>)prenotazioni.findAll()) {
 				if(r.getId()==p.getIdRisorsa()) {
-					if(!((start.isAfter(p.dataFine))||(end.isBefore(p.dataInizio)))){
+					if(!((start.isAfter(p.getDataFine()))||(end.isBefore(p.getDataInizio())))){
 						System.out.println("SPACCATO");
 						flag = false;
 						break;
@@ -106,20 +146,5 @@ public class Controller {
 		}
 	}
 	
-	public void cancellaPrenotazione(int idPrenotazione){
-		db.cancellaPrenotazione(idPrenotazione);
-	}
-	
-	public void consegna(int idPrenotazione) {
-		db.getPrenotazione().get(idPrenotazione).consegna();
-	}
-	
-	public void clear() {
-		db.clear();
-	}
-	
-	public Database getDb() {
-		return db;
-	}
 	
 }

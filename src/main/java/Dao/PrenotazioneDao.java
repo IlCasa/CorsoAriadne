@@ -6,11 +6,11 @@ import java.util.TreeMap;
 
 import ariadne.it.AffittoRisorse.Prenotazione;
 
-public class prenotazioneDao<T extends Prenotazione> implements DAO<Integer, T> {
+public class PrenotazioneDao<T extends Prenotazione> implements DAO<Integer, T> {
 
 	private TreeMap<Integer, T> prenotazioneMap;
 
-	public prenotazioneDao() {
+	public PrenotazioneDao() {
 		prenotazioneMap = new TreeMap<>();
 	}
 

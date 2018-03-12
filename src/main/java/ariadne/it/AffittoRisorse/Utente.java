@@ -1,10 +1,11 @@
 package ariadne.it.AffittoRisorse;
 
 public class Utente {
-	private String mail, password;
+	private String mail, password, nome;
 
-	public Utente(String mail, String password) {
+	public Utente(String mail, String password, String nome) {
 		this.mail = mail;
+		this.nome = nome;
 		this.password = password;
 	}
 

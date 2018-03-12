@@ -1,14 +1,13 @@
 package ariadne.it.AffittoRisorse;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
+import org.joda.time.LocalDateTime;
+
 
 public class Prenotazione {
 	private int idRisorsa;
 	private String user;
-	LocalDateTime dataInizio;
-	LocalDateTime dataFine;
+	private LocalDateTime dataInizio;
+	private LocalDateTime dataFine;
 	private LocalDateTime DataConsegna;
 	private int idPrenotazione;
 	private static int addId;
@@ -31,6 +30,15 @@ public class Prenotazione {
 	public String getIdUtente() {
 		return user;
 	}
+	
+	public LocalDateTime getDataInizio() {
+		return dataInizio;
+	}
+
+	public LocalDateTime getDataFine() {
+		return dataFine;
+	}
+
 	public boolean consegnato() {
 		LocalDateTime dataAttuale = LocalDateTime.now();
 		if (DataConsegna.isBefore(dataAttuale)) {

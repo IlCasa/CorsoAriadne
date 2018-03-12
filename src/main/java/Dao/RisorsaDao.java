@@ -6,11 +6,11 @@ import java.util.TreeMap;
 
 import ariadne.it.AffittoRisorse.Risorsa;
 
-public class risorsaDao<T extends Risorsa> implements DAO<Integer,T> {
+public class RisorsaDao<T extends Risorsa> implements DAO<Integer,T> {
 
 	private TreeMap<Integer, T> risorsaMap;
 	
-	public risorsaDao() {
+	public RisorsaDao() {
 		risorsaMap = new TreeMap<>();
 	}
 
@@ -33,8 +33,8 @@ public class risorsaDao<T extends Risorsa> implements DAO<Integer,T> {
 	}
 
 	@Override
-	public List<T> findAll() {
-		List<T> listaRisorse = new ArrayList<>(risorsaMap.values());
+	public ArrayList<T> findAll() {
+		ArrayList<T> listaRisorse = new ArrayList<>(risorsaMap.values());
 		return listaRisorse;
 	}
 
@@ -43,4 +43,10 @@ public class risorsaDao<T extends Risorsa> implements DAO<Integer,T> {
 		return risorsaMap.get(k);
 	}
 
+	public boolean checkRisorsa(Integer key) {
+		if(risorsaMap.containsKey(key))
+			return true;
+		else
+			return false;
+	}
 }
