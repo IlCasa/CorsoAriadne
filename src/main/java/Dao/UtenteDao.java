@@ -2,6 +2,7 @@ package Dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 import ariadne.it.AffittoRisorse.Utente;
@@ -65,6 +66,23 @@ public class UtenteDao<T extends Utente> implements DAO<String, T>{
 	@Override
 	public int mapSize() {
 		return utenteMap.size();
+	}
+
+
+	@Override
+	public void printAll() {
+		System.out.println("-UTENTI: \n");
+		for (Map.Entry<String, T> entry : utenteMap.entrySet()) {
+	        T value = entry.getValue();
+	        String key = entry.getKey();
+	        System.out.println("-- "+ value.toString());
+		}
+				
+	}
+
+
+	public void clear() {
+		utenteMap.clear();
 	}
 
 }

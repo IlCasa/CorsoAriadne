@@ -2,6 +2,7 @@ package Dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 import ariadne.it.AffittoRisorse.Risorsa;
@@ -53,5 +54,21 @@ public class RisorsaDao<T extends Risorsa> implements DAO<Integer,T> {
 	@Override
 	public int mapSize() {
 		return risorsaMap.size();
+	}
+
+	@Override
+	public void printAll() {
+		System.out.println("-RISORSE: \n");
+		for (Map.Entry<Integer, T> entry : risorsaMap.entrySet()) {
+	        T value = entry.getValue();
+	        Integer key = entry.getKey();
+	        System.out.println("-- "+ value.toString());
+		}
+				
+	}
+
+	public void clear() {
+		risorsaMap.clear();
+		Risorsa.resetIncrementaID();
 	}
 }

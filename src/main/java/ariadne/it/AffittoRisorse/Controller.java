@@ -6,6 +6,7 @@ import java.util.List;
 import org.joda.time.LocalDateTime;
 
 import Dao.*;
+import Exception.ResourceNotExistException;
 
 public class Controller {
 	
@@ -31,17 +32,24 @@ public class Controller {
 		return utenti;
 	}
 
+	public void printEverything() {
+		risorse.printAll();
+		utenti.printAll();
+		prenotazioni.printAll();
+	}
 	// RISORSE CONTROLLER
 	public <T extends Risorsa> void addRisorsa(T ris) {
-		
 		risorse.createRecord(ris);
 	}
 	
-	public <T extends Risorsa> void updateRisorsa(int id, T ris) {
+	public <T extends Risorsa> void updateRisorsa(int id, T ris)  {
 		if(risorse.checkRisorsa(id))
 			risorse.updateRecord(id, ris);
 		else
-			System.out.println("- Risorsa non presente, impossibile l'update");
+			try {
+				throw new ResourceNotExistException();
+			} catch (ResourceNotExistException e) {
+			}
 	}
 	
 	public void deleteRisorsa(int id) {
@@ -157,6 +165,12 @@ public class Controller {
 			System.out.println("non inseribile in nessuno slot");
 			return -1;
 		}
+	}
+	
+	public void clearAll() {
+		risorse.clear();
+		prenotazioni.clear();
+		utenti.clear();
 	}
 	
 	

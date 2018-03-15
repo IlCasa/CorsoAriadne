@@ -10,5 +10,6 @@ public interface DAO<K, T>{
 	public List<T> findAll();
 	public T findById(K k);
 	public int mapSize();
+	public void printAll();
 	
 }

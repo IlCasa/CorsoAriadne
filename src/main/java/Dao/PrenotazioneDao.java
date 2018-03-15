@@ -2,6 +2,7 @@ package Dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 import ariadne.it.AffittoRisorse.Prenotazione;
@@ -37,6 +38,8 @@ public class PrenotazioneDao<T extends Prenotazione> implements DAO<Integer, T> 
 		List<T> listaPrenotazioni = new ArrayList<>(prenotazioneMap.values());
 		return listaPrenotazioni;
 	}
+	
+	
 
 	@Override
 	public T findById(Integer k) {
@@ -46,6 +49,22 @@ public class PrenotazioneDao<T extends Prenotazione> implements DAO<Integer, T> 
 	@Override
 	public int mapSize() {
 		return prenotazioneMap.size();
+	}
+
+	@Override
+	public void printAll() {
+		System.out.println("-PRENOTAZIONI: \n");
+		for (Map.Entry<Integer, T> entry : prenotazioneMap.entrySet()) {
+	        T value = entry.getValue();
+	        Integer key = entry.getKey();
+	        System.out.println("-- "+ value.toString());
+		}
+		
+	}
+
+	public void clear() {
+		prenotazioneMap.clear();
+		Prenotazione.resetIncrementaId();
 	}
 
 }

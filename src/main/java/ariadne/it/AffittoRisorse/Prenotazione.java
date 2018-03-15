@@ -56,6 +56,12 @@ public class Prenotazione {
 	public void consegna() {
 		DataConsegna = LocalDateTime.now();
 	}
+
+	
+
+	public static void resetIncrementaId() {
+		Prenotazione.addId = 0;
+	}
 	
 	
 	
