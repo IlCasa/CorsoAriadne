@@ -116,7 +116,7 @@ public class Controller {
 						System.out.println("aggiunta prenotazione");
 						prenotazioni.createRecord(p);
 					}else
-						System.out.println("DIOBOIA hai paccato, non ci sono slot o risorse");
+						System.out.println("-Non ci sono slot o risorse");
 				}else{
 					System.out.println("date sballate");
 				}
